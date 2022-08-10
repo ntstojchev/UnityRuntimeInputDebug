@@ -84,34 +84,34 @@ MonoBehaviour:
     Icon: {fileID: 0}
   - Name: Alpha0
     Key: 48
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: c6f95e7d23b62db439960e64f3167374, type: 3}
   - Name: Alpha1
     Key: 49
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 0e611b73606c44f40a8be7d9c6775477, type: 3}
   - Name: Alpha2
     Key: 50
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: ef6c0efafcbadc14584f0c386670bf48, type: 3}
   - Name: Alpha3
     Key: 51
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: f9625e900e59e9c40a463d483735d5d9, type: 3}
   - Name: Alpha4
     Key: 52
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 1c863e804f08dfb42bda543c75e5a669, type: 3}
   - Name: Alpha5
     Key: 53
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 81792a584ea57e94d87049a0f98a7874, type: 3}
   - Name: Alpha6
     Key: 54
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: c8ceeda9c4333984d8bcc05969beb96b, type: 3}
   - Name: Alpha7
     Key: 55
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 3fe7ac6ca20a16c4580c297d4fe63ae8, type: 3}
   - Name: Alpha8
     Key: 56
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 88e3a79eb36e902468bac1f1df74cb32, type: 3}
   - Name: Alpha9
     Key: 57
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 012df7695b7ba5a4faf09d1b0930e7c6, type: 3}
   - Name: Colon
     Key: 58
     Icon: {fileID: 0}
@@ -438,13 +438,13 @@ MonoBehaviour:
     Icon: {fileID: 0}
   - Name: Mouse0
     Key: 323
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: cfd914c7591447a45a9ff60b9c6c3738, type: 3}
   - Name: Mouse1
     Key: 324
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 710d3611020f8c043b6a51070476b0ba, type: 3}
   - Name: Mouse2
     Key: 325
-    Icon: {fileID: 0}
+    Icon: {fileID: 21300000, guid: bf4bb4695ecc68a46a8bc20919b96b14, type: 3}
   - Name: Mouse3
     Key: 326
     Icon: {fileID: 0}
@@ -1002,5 +1002,11 @@ MonoBehaviour:
     PositiveValueIcon: {fileID: 0}
     NegativeValueIcon: {fileID: 0}
   - AxisName: Vertical
+    PositiveValueIcon: {fileID: 0}
+    NegativeValueIcon: {fileID: 0}
+  - AxisName: Mouse X
+    PositiveValueIcon: {fileID: 0}
+    NegativeValueIcon: {fileID: 0}
+  - AxisName: Mouse Y
     PositiveValueIcon: {fileID: 0}
     NegativeValueIcon: {fileID: 0}
