@@ -217,15 +217,19 @@ namespace Code.InputDebugger
 							DrawAxisLabel(axisInputActionPair);
 						}
 						else {
-							GUILayout.Box(axisInputActionPair.Key.PositiveValueIcon.texture);
+							GUIStyle protoStyle = new GUIStyle();
+							protoStyle.normal.background = axisInputActionPair.Key.PositiveValueIcon.texture;
+							GUILayout.Box(Texture2D.blackTexture, protoStyle, GUILayout.Width(InputIconsSize.x), GUILayout.Height(InputIconsSize.y));
 						}
 					}
 					else if (axisInputActionPair.Value < 0) {
-						if (axisInputActionPair.Key.NegativeValueIcon== null) {
+						if (axisInputActionPair.Key.NegativeValueIcon == null) {
 							DrawAxisLabel(axisInputActionPair);
 						}
 						else {
-							GUILayout.Box(axisInputActionPair.Key.NegativeValueIcon.texture);
+							GUIStyle protoStyle = new GUIStyle();
+							protoStyle.normal.background = axisInputActionPair.Key.NegativeValueIcon.texture;
+							GUILayout.Box(Texture2D.blackTexture, protoStyle, GUILayout.Width(InputIconsSize.x), GUILayout.Height(InputIconsSize.y));
 						}
 					}
 				}
