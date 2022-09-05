@@ -575,6 +575,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Enabled: 1
+  InputHistoryDebuggerEnabled: 1
+  CaptureMousePosition: 0
   InputActions: {fileID: 11400000, guid: 46c1e62c84e88ad409e3599b540b95b4, type: 2}
   InputIconsSize: {x: 64, y: 64}
   DebugTextStyle:
@@ -645,11 +647,12 @@ MonoBehaviour:
     m_StretchWidth: 1
     m_StretchHeight: 0
   AxisValueLabelPattern: '|{0} {1}|'
-  CaptureMousePosition: 1
   MousePositionLabelPattern: 'MousePos: {0}x{1}'
   DrawAnchor: 1
   DrawXOffset: 0
   DrawYOffset: 0
+  QueueSize: 20
+  DequeueTime: 2
 --- !u!4 &1244552353
 Transform:
   m_ObjectHideFlags: 0

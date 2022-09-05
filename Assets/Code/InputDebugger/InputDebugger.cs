@@ -9,20 +9,27 @@ namespace Code.InputDebugger
 	public class InputDebugger : MonoBehaviour
 	{
 		public bool Enabled = false;
+		public bool CaptureMousePosition = false;
 
 		[Header("Capture settings")]
 		public InputDebugVisualStyle InputActions;
 		public Vector2 InputIconsSize = new Vector2(64, 64);
-		public GUIStyle DebugTextStyle;
-		public string AxisValueLabelPattern = "{0} {1}";
 
-		public bool CaptureMousePosition = false;
+		[Header("Capture default display settings")]
+		public string AxisValueLabelPattern = "{0} {1}";
 		public string MousePositionLabelPattern = "MousePos: {0}x {1}y";
+		public GUIStyle DebugTextStyle;
 
 		[Header("Position")]
 		public DebugStyleAnchorType DrawAnchor = DebugStyleAnchorType.TopLeft;
 		public int DrawXOffset = 0;
 		public int DrawYOffset = 0;
+
+		[Header("Input History Settings")]
+		public bool InputHistoryEnabled = false;
+		public int QueueSize = 40;
+		public float DequeueTime = 1.5f;
+		public float InputHistoryDrawYOffset = 200f;
 
 		private DebugStyleAnchorType _drawAnchorInternal;
 
@@ -31,6 +38,10 @@ namespace Code.InputDebugger
 
 		private List<KeyInputAction> _displayKeyActions = new List<KeyInputAction>();
 		private Dictionary<AxisInputAction, float> _displayAxisActions = new Dictionary<AxisInputAction, float>();
+
+		private List<KeyInputAction> _justPressedKeys = new List<KeyInputAction>();
+
+		private LinkedList<FrameInputSummary> _inputHistory = new LinkedList<FrameInputSummary>();
 
 		private void Start()
 		{
@@ -45,11 +56,16 @@ namespace Code.InputDebugger
 
 			_displayKeyActions.Clear();
 			_displayAxisActions.Clear();
+			_justPressedKeys.Clear();
 
 			if (Input.anyKey) {
 				foreach (KeyInputAction keyAction in _captureKeys) {
 					if (Input.GetKey(keyAction.Key)) {
 						_displayKeyActions.Add(keyAction);
+					}
+
+					if (Input.GetKeyDown(keyAction.Key)) {
+						_justPressedKeys.Add(keyAction);
 					}
 				}
 			}
@@ -58,6 +74,28 @@ namespace Code.InputDebugger
 				float axisValue = Input.GetAxis(axisAction.AxisName);
 				if (axisValue != 0) {
 					_displayAxisActions.Add(axisAction, axisValue);
+				}
+			}
+
+			if (InputHistoryEnabled) {
+				if (_justPressedKeys.Any()) {
+
+					if (_inputHistory.Count > QueueSize) {
+						_inputHistory.RemoveLast();
+					}
+
+					_inputHistory.AddFirst(new FrameInputSummary
+					{
+						FrameCount = Time.frameCount,
+						FrameTime = Time.time,
+						KeyActions = new List<KeyInputAction>(_displayKeyActions),
+					});
+				}
+
+				if (_inputHistory.Any()) {
+					if (Time.time - _inputHistory.Last().FrameTime > DequeueTime) {
+						_inputHistory.RemoveLast();
+					}
 				}
 			}
 		}
@@ -93,7 +131,7 @@ namespace Code.InputDebugger
 				GUILayout.FlexibleSpace();
 			}
 
-			DrawInputKeyActions();
+			DrawInputKeyActions(_displayKeyActions);
 
 			if (_drawAnchorInternal == DebugStyleAnchorType.BottomLeft
 			|| _drawAnchorInternal == DebugStyleAnchorType.TopLeft
@@ -119,7 +157,7 @@ namespace Code.InputDebugger
 				GUILayout.FlexibleSpace();
 			}
 
-			DrawInputAxisActions();
+			DrawInputAxisActions(_displayAxisActions);
 
 			if (_drawAnchorInternal == DebugStyleAnchorType.BottomLeft
 			|| _drawAnchorInternal == DebugStyleAnchorType.TopLeft
@@ -172,6 +210,22 @@ namespace Code.InputDebugger
 
 			GUILayout.EndVertical();
 			GUILayout.EndArea();
+
+			if (InputHistoryEnabled) {
+				if (_drawAnchorInternal == DebugStyleAnchorType.TopLeft) {
+					GUILayout.BeginArea(new Rect(0, InputHistoryDrawYOffset, Screen.width, Screen.height));
+				}
+				else {
+					GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
+				}
+
+				foreach (FrameInputSummary inputSummary in _inputHistory) {
+					GUILayout.BeginHorizontal();
+					DrawInputKeyActions(inputSummary.KeyActions);
+					GUILayout.EndHorizontal();
+				}
+				GUILayout.EndArea();
+			}
 		}
 
 		public void UpdateCapturedInputActions()
@@ -192,10 +246,10 @@ namespace Code.InputDebugger
 			_drawAnchorInternal = DrawAnchor;
 		}
 
-		private void DrawInputKeyActions()
+		private void DrawInputKeyActions(List<KeyInputAction> inputActions)
 		{
-			if (_displayKeyActions.Any()) {
-				foreach (KeyInputAction keyAction in _displayKeyActions) {
+			if (inputActions.Any()) {
+				foreach (KeyInputAction keyAction in inputActions) {
 					if (keyAction.Icon == null) {
 						GUILayout.Label(keyAction.Name.ToString(), DebugTextStyle);
 					}
@@ -208,10 +262,10 @@ namespace Code.InputDebugger
 			}
 		}
 
-		private void DrawInputAxisActions()
+		private void DrawInputAxisActions(Dictionary<AxisInputAction, float> axisActions)
 		{
-			if (_displayAxisActions.Any()) {
-				foreach (KeyValuePair<AxisInputAction, float> axisInputActionPair in _displayAxisActions) {
+			if (axisActions.Any()) {
+				foreach (KeyValuePair<AxisInputAction, float> axisInputActionPair in axisActions) {
 					if (axisInputActionPair.Value > 0) {
 						if (axisInputActionPair.Key.PositiveValueIcon == null) {
 							DrawAxisLabel(axisInputActionPair);
