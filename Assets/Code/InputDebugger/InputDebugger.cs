@@ -8,27 +8,87 @@ namespace Code.InputDebugger
 {
 	public class InputDebugger : MonoBehaviour
 	{
+		/// <summary>
+		/// Starts/stops the input debugger
+		/// </summary>
+		[Tooltip("Starts/stops the input debugger")]
 		public bool Enabled = false;
+
+		/// <summary>
+		/// Should the input debugger capture the mouse position
+		/// </summary>
+		[Tooltip("Should the input debugger capture the mouse position")]
 		public bool CaptureMousePosition = false;
 
 		[Header("Capture settings")]
-		public InputDebugVisualStyle InputActions;
+		/// <summary>
+		/// Input actions collection to capture during the frame
+		/// </summary>
+		public InputDebugCaptureActions InputActions;
+
+		/// <summary>
+		/// Display size for the icons that are assigned on the input actions
+		/// </summary>
 		public Vector2 InputIconsSize = new Vector2(64, 64);
 
 		[Header("Capture default display settings")]
+
+		/// <summary>
+		/// Axis display pattern when appropriate asset (icon) is not provided;
+		/// </summary>
+		[Tooltip("Axis display pattern when appropriate asset (icon) is not provided")]
 		public string AxisValueLabelPattern = "{0} {1}";
+
+		/// <summary>
+		/// Display label for mouse coordinates when CaptureMousePosition is enabled
+		/// </summary>
+		[Tooltip("Display label for mouse coordinates when CaptureMousePosition is enabled")]
 		public string MousePositionLabelPattern = "MousePos: {0}x {1}y";
+
+		/// <summary>
+		/// Text style that will be applied on the debug labels
+		/// </summary>
+		[Tooltip("Text style that will be applied on the debug labels")]
 		public GUIStyle DebugTextStyle;
 
-		[Header("Position")]
+		[Header("Runtime input display position")]
 		public DebugStyleAnchorType DrawAnchor = DebugStyleAnchorType.TopLeft;
+
+		/// <summary>
+		/// Draw offset in pixels for the X axis that will be applied on the anchor
+		/// </summary>
+		[Tooltip("Draw offset in pixels for the X axis that will be applied on the anchor")]
 		public int DrawXOffset = 0;
+
+		/// <summary>
+		/// Draw offset in pixels for the Y axis that will be applied on the anchor
+		/// </summary>
+		[Tooltip("Draw offset in pixels for the Y axis that will be applied on the anchor")]
 		public int DrawYOffset = 0;
 
 		[Header("Input History Settings")]
+		/// <summary>
+		/// Starts/stops the input debugger
+		/// </summary>
+		[Tooltip("Starts/stops the input history debug")]
 		public bool InputHistoryEnabled = false;
+
+		/// <summary>
+		/// Number of stored input actions in the input history
+		/// </summary>
+		[Tooltip("Number of stored input actions in the input history")]
 		public int QueueSize = 40;
+
+		/// <summary>
+		/// Time in seconds when the input action will be removed
+		/// </summary>
+		[Tooltip("Time in seconds when the input action will be removed")]
 		public float DequeueTime = 1.5f;
+
+		/// <summary>
+		/// When both debuggers are active what pixel to be applied on the X axis to avoid overlap
+		/// </summary>
+		[Tooltip("When both debuggers are active what pixel to be applied on the X axis to avoid overlap")]
 		public float InputHistoryDrawYOffset = 200f;
 
 		private DebugStyleAnchorType _drawAnchorInternal;
@@ -39,9 +99,8 @@ namespace Code.InputDebugger
 		private List<KeyInputAction> _displayKeyActions = new List<KeyInputAction>();
 		private Dictionary<AxisInputAction, float> _displayAxisActions = new Dictionary<AxisInputAction, float>();
 
-		private List<KeyInputAction> _justPressedKeys = new List<KeyInputAction>();
-
 		private LinkedList<FrameInputSummary> _inputHistory = new LinkedList<FrameInputSummary>();
+		private List<KeyInputAction> _justPressedKeys = new List<KeyInputAction>();
 
 		private void Start()
 		{
@@ -54,10 +113,12 @@ namespace Code.InputDebugger
 				return;
 			}
 
+			//Prepare capture collections
 			_displayKeyActions.Clear();
 			_displayAxisActions.Clear();
 			_justPressedKeys.Clear();
 
+			//If something was pressed, try to capture the input actions
 			if (Input.anyKey) {
 				foreach (KeyInputAction keyAction in _captureKeys) {
 					if (Input.GetKey(keyAction.Key)) {
@@ -70,6 +131,7 @@ namespace Code.InputDebugger
 				}
 			}
 
+			//Capture axes that have negative/positive values
 			foreach (AxisInputAction axisAction in _captureAxes) {
 				float axisValue = Input.GetAxis(axisAction.AxisName);
 				if (axisValue != 0) {
@@ -78,6 +140,8 @@ namespace Code.InputDebugger
 			}
 
 			if (InputHistoryEnabled) {
+
+				//If something was JUST pressed, add it to the history
 				if (_justPressedKeys.Any()) {
 
 					if (_inputHistory.Count > QueueSize) {
@@ -92,6 +156,7 @@ namespace Code.InputDebugger
 					});
 				}
 
+				//Remove input actions that have expired
 				if (_inputHistory.Any()) {
 					if (Time.time - _inputHistory.Last().FrameTime > DequeueTime) {
 						_inputHistory.RemoveLast();
@@ -211,6 +276,7 @@ namespace Code.InputDebugger
 			GUILayout.EndVertical();
 			GUILayout.EndArea();
 
+			//Begin drawing the input history in separate area
 			if (InputHistoryEnabled) {
 				if (_drawAnchorInternal == DebugStyleAnchorType.TopLeft) {
 					GUILayout.BeginArea(new Rect(0, InputHistoryDrawYOffset, Screen.width, Screen.height));
@@ -228,6 +294,9 @@ namespace Code.InputDebugger
 			}
 		}
 
+		/// <summary>
+		/// Force update on the captured input actions and axes
+		/// </summary>
 		public void UpdateCapturedInputActions()
 		{
 			_captureKeys.Clear();

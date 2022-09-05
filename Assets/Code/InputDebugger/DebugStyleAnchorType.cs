@@ -1,5 +1,8 @@
 ﻿namespace Code.InputDebugger
 {
+	/// <summary>
+	/// Describes all possible anchor positions for the input debugger
+	/// </summary>
 	public enum DebugStyleAnchorType
 	{
 		None = 0,
