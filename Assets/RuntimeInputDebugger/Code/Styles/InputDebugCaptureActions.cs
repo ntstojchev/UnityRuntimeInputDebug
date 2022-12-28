@@ -9,7 +9,7 @@ namespace Code.Styles
 	/// <summary>
 	/// Handles data for all input keys and axes that should be captured during a frame
 	/// </summary>
-	[CreateAssetMenu(fileName = "InputDebugCaptureActions", menuName = "Debug Styles/InputDebugCaptureActions", order = 1)]
+	[CreateAssetMenu(fileName = "InputDebugCaptureActions", menuName = "InputDebugger/InputDebugCaptureActions", order = 1)]
 	public class InputDebugCaptureActions : ScriptableObject
 	{
 		/// <summary>

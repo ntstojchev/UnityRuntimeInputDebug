@@ -17,12 +17,12 @@ namespace Code.InputActions
 		public string AxisName;
 
 		/// <summary>
-		/// Costom sprite for when the axis returns positive values
+		/// Custom sprite for when the axis returns positive values
 		/// </summary>
 		public Sprite PositiveValueIcon;
 
 		/// <summary>
-		/// Costom sprite for when the axis returns negative values
+		/// Custom sprite for when the axis returns negative values
 		/// </summary>
 		public Sprite NegativeValueIcon;
 	}
