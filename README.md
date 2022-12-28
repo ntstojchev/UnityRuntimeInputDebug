@@ -28,7 +28,6 @@ Displays latest handled input in a queue
 ## Installation
 - Copy [Assets/RuntimeInputDebugger](https://github.com/ntstojchev/UnityRuntimeInputDebug/tree/main/Assets/RuntimeInputDebugger) folder to your project
 - Download [latest release](https://github.com/ntstojchev/UnityRuntimeInputDebug/releases) zip and unzip it's content to your project
-- [Download the URID_Package](https://github.com/ntstojchev/UnityRuntimeInputDebug/raw/main/URID_Package.unitypackage) and import it in your project
 
 ## Usage
 
@@ -49,11 +48,25 @@ The debugger includes default prefab (oreset) that can be used or extended in mo
 ![DefaultDebuggerSettings](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/DefaultInputDebuggerComponentSettings.png)
 
 ### Custom integration
+The main component that you need to use is the `InputDebugger` component. The debugger is based on IMGUI so it's supposed to work wherever you attach it or instantiate it.
+- To use the debugger:
+  - You can toggle the debugger on/off from the `Enabled` value either from code or from the inspector.
+  - You must assign `InputDebugCaptureActions` scriptable object in the `Input Actions` field
+  - `InputDebugCaptureActions` is a collection of all the keys and axis that the debugger must listen for. The collection is composed from Keys and Axis collections.
+    - `Keys` collection contains `KeyInputAction`. If `Icon` is not assigned, the `Name` will be used during debugging.
+![KeyInputActionExample](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/KeyInputActionExample.png)
+    - `Axes` collection contains `AxisInputAction`. If  `PositiveValueIcon` and/or `NegativeValueIcon` are not assigned, `AxisName` will be used and the value will be displayed based on the `AxisValueLabelPattern` set in the `InputDebugger`.
+![AxisInputActionExampe](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/AxisInputActionExample.png)
 
+  - `DebugTextStyle` is `GUIStyle` so you can configure it by your preferences. _Note that the default value for the `Normal` style is BLACK!_
+  - `Draw Anchor` can be used to alter the position of the debugger. Currently supported - `TopLeft, TopCenter, TopRight, MiddleLeft, Middle, MiddleRight, BottomLeft, BottomCenter, BottomRight`.
+
+- To use the input history queue:
+  - Enable it by toggling the `InputHistoryEnabled` property either by code or by the inspector
 
 ## Examples
 
-Example usage of the tool in the Unity Open Project - Chop Chop!:
+Example usage of the debugger in the Unity Open Project - Chop Chop!:
 
 ![CaptureExample](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/UOP_InputCaptureExample_Light.gif)
 
