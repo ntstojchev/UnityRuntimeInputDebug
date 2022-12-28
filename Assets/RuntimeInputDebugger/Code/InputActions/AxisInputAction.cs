@@ -1,4 +1,6 @@
-﻿using System;
+﻿// MIT License Copyright(c) 2022 Nedislav Stoychev, https://github.com/ntstojchev/UnityRuntimeInputDebug
+
+using System;
 using UnityEngine;
 
 namespace Code.InputActions

@@ -1,4 +1,6 @@
-﻿namespace Code.InputDebugger
+﻿// MIT License Copyright(c) 2022 Nedislav Stoychev, https://github.com/ntstojchev/UnityRuntimeInputDebug
+
+namespace Code.InputDebugger
 {
 	/// <summary>
 	/// Describes all possible anchor positions for the input debugger

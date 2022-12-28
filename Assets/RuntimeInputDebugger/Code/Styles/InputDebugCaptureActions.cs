@@ -1,4 +1,6 @@
-﻿using Code.InputActions;
+﻿// MIT License Copyright(c) 2022 Nedislav Stoychev, https://github.com/ntstojchev/UnityRuntimeInputDebug
+
+using Code.InputActions;
 using System.Collections.Generic;
 using UnityEngine;
 

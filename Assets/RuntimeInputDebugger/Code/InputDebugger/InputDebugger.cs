@@ -1,3 +1,5 @@
+// MIT License Copyright(c) 2022 Nedislav Stoychev, https://github.com/ntstojchev/UnityRuntimeInputDebug
+
 using Code.InputActions;
 using Code.Styles;
 using System.Collections.Generic;
