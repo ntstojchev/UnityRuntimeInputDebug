@@ -114,11 +114,6 @@ namespace Code.InputDebugger
 			if (!Enabled) {
 				return;
 			}
-			else if (InputActions == null) {
-				Debug.LogWarning("InputDebugger cannot work with empty capture set. Either assign input capture set or create a new one and then assign it. " +
-					"You can create new one from the context menu: InputDebugger/InputDebugCaptureActions");
-				return;
-			}
 
 			//Prepare capture collections
 			_displayKeyActions.Clear();
@@ -306,6 +301,12 @@ namespace Code.InputDebugger
 		/// </summary>
 		public void UpdateCapturedInputActions()
 		{
+			if (InputActions == null) {
+				Debug.LogWarning("InputDebugger cannot work with empty capture set. Either assign input capture set or create a new one and then assign it. " +
+					"You can create new one from the context menu: InputDebugger/InputDebugCaptureActions");
+				return;
+			}
+
 			_captureKeys.Clear();
 			_captureKeys.AddRange(InputActions.Keys);
 
