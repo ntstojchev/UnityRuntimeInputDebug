@@ -156,29 +156,6 @@ namespace Code.InputDebugger
 			}
 		}
 
-		/// <summary>
-		/// Update all capture keys from the InputActions set
-		/// </summary>
-		private void FillInputCaptureInformation()
-		{
-			//Prepare capture collections
-			_displayKeyActions.Clear();
-			_displayAxisActions.Clear();
-			_justPressedKeys.Clear();
-
-			if (Input.anyKey) {
-				foreach (KeyInputAction keyAction in _captureKeys) {
-					if (Input.GetKey(keyAction.Key)) {
-						_displayKeyActions.Add(keyAction);
-					}
-
-					if (Input.GetKeyDown(keyAction.Key)) {
-						_justPressedKeys.Add(keyAction);
-					}
-				}
-			}
-		}
-
 		private void OnGUI()
 		{
 			if (DrawAnchor != _drawAnchorInternal) {
@@ -401,6 +378,29 @@ namespace Code.InputDebugger
 		public void DisableInputDebugger()
 		{
 			enabled = false;
+		}
+
+		/// <summary>
+		/// Update all capture keys from the InputActions set
+		/// </summary>
+		private void FillInputCaptureInformation()
+		{
+			//Prepare capture collections
+			_displayKeyActions.Clear();
+			_displayAxisActions.Clear();
+			_justPressedKeys.Clear();
+
+			if (Input.anyKey) {
+				foreach (KeyInputAction keyAction in _captureKeys) {
+					if (Input.GetKey(keyAction.Key)) {
+						_displayKeyActions.Add(keyAction);
+					}
+
+					if (Input.GetKeyDown(keyAction.Key)) {
+						_justPressedKeys.Add(keyAction);
+					}
+				}
+			}
 		}
 
 		private void SetAnchor(DebugStyleAnchorType newAnchor)
