@@ -39,7 +39,7 @@ The debugger includes default prefab (preset) that can be used or extended in mo
 - Instantiate `InputDebugger` prefab when you need the input debugger or put it in the scene you want the debugger to be active
 - `InputDebugger` can be found in the Prefabs folder
 - The default preset:
-  - has the input debugger enabled by default
+  - has the input display debugger enabled by default
   - supports most of the keyboard keys and gamepad buttons
   - handles small number of the default axis from the Input Project Settings - Horizontal, Vertical, Mouse X, Mouse Y, Mouse ScrollWheel
   - is anchored in the top left part of the screen
@@ -50,7 +50,8 @@ The debugger includes default prefab (preset) that can be used or extended in mo
 ### Custom integration
 The main component that you need to use is the `InputDebugger` component. The debugger is based on IMGUI so it's supposed to work wherever you attach it or instantiate it.
 - To use the debugger:
-  - You can toggle the debugger on/off from the `Enabled` value either from code or from the inspector.
+  - You can toggle the debugger on/off from the inspector enable/disable checkbox or from code - `EnableInputDebugger()`/`DisableInputDebugger()` functions.
+  - You can toggle the input dislay debug from either the inspector `InputDisplayEnabled` checkbox or setting the same bool value from code
   - You must assign `InputDebugCaptureActions` scriptable object in the `Input Actions` field
   - `InputDebugCaptureActions` is a collection of all the keys and axis that the debugger must listen for. The collection is composed from Keys and Axis collections.
     - `Keys` collection contains `KeyInputAction`. If `Icon` is not assigned, the `Name` will be used during debugging.
