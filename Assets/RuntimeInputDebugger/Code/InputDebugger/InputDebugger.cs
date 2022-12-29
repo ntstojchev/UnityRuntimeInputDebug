@@ -11,10 +11,10 @@ namespace Code.InputDebugger
 	public class InputDebugger : MonoBehaviour
 	{
 		/// <summary>
-		/// Starts/stops the input debugger
+		/// Starts/stops the input display debugger
 		/// </summary>
-		[Tooltip("Starts/stops the input debugger")]
-		public bool Enabled = false;
+		[Tooltip("Starts/stops the input display debugger")]
+		public bool InputDisplayEnabled = false;
 
 		/// <summary>
 		/// Should the input debugger capture the mouse position
@@ -106,42 +106,31 @@ namespace Code.InputDebugger
 
 		private void Start()
 		{
-			UpdateCapturedInputActions();
+			//Prepares the debugger to capture input from the assigned input set
+			UpdateCapturedInputActionsFromInputSet();
 		}
 
 		private void Update()
 		{
-			if (!Enabled) {
-				return;
-			}
+			if (InputDisplayEnabled) {
+				
+				//Try to capture the input actions and fill the collections
+				FillInputCaptureInformation();
 
-			//Prepare capture collections
-			_displayKeyActions.Clear();
-			_displayAxisActions.Clear();
-			_justPressedKeys.Clear();
-
-			//If something was pressed, try to capture the input actions
-			if (Input.anyKey) {
-				foreach (KeyInputAction keyAction in _captureKeys) {
-					if (Input.GetKey(keyAction.Key)) {
-						_displayKeyActions.Add(keyAction);
+				//Capture axes that have negative/positive values
+				foreach (AxisInputAction axisAction in _captureAxes) {
+					float axisValue = Input.GetAxis(axisAction.AxisName);
+					if (axisValue != 0) {
+						_displayAxisActions.Add(axisAction, axisValue);
 					}
-
-					if (Input.GetKeyDown(keyAction.Key)) {
-						_justPressedKeys.Add(keyAction);
-					}
-				}
-			}
-
-			//Capture axes that have negative/positive values
-			foreach (AxisInputAction axisAction in _captureAxes) {
-				float axisValue = Input.GetAxis(axisAction.AxisName);
-				if (axisValue != 0) {
-					_displayAxisActions.Add(axisAction, axisValue);
 				}
 			}
 
 			if (InputHistoryEnabled) {
+
+				if (!InputDisplayEnabled) {
+					FillInputCaptureInformation();
+				}
 
 				//If something was JUST pressed, add it to the history
 				if (_justPressedKeys.Any()) {
@@ -167,6 +156,29 @@ namespace Code.InputDebugger
 			}
 		}
 
+		/// <summary>
+		/// Update all capture keys from the InputActions set
+		/// </summary>
+		private void FillInputCaptureInformation()
+		{
+			//Prepare capture collections
+			_displayKeyActions.Clear();
+			_displayAxisActions.Clear();
+			_justPressedKeys.Clear();
+
+			if (Input.anyKey) {
+				foreach (KeyInputAction keyAction in _captureKeys) {
+					if (Input.GetKey(keyAction.Key)) {
+						_displayKeyActions.Add(keyAction);
+					}
+
+					if (Input.GetKeyDown(keyAction.Key)) {
+						_justPressedKeys.Add(keyAction);
+					}
+				}
+			}
+		}
+
 		private void OnGUI()
 		{
 			if (DrawAnchor != _drawAnchorInternal) {
@@ -186,57 +198,61 @@ namespace Code.InputDebugger
 				GUILayout.FlexibleSpace();
 			}
 
-			#region Draw InputKeyActions
-			GUILayout.BeginHorizontal();
+			if (InputDisplayEnabled) {
 
-			if (_drawAnchorInternal == DebugStyleAnchorType.BottomRight
-			|| _drawAnchorInternal == DebugStyleAnchorType.TopRight
-			|| _drawAnchorInternal == DebugStyleAnchorType.MiddleRight
-			|| _drawAnchorInternal == DebugStyleAnchorType.Middle
-			|| _drawAnchorInternal == DebugStyleAnchorType.TopCenter
-			|| _drawAnchorInternal == DebugStyleAnchorType.BottomCenter) {
-				GUILayout.FlexibleSpace();
+				#region Draw InputKeyActions
+				GUILayout.BeginHorizontal();
+
+				if (_drawAnchorInternal == DebugStyleAnchorType.BottomRight
+				|| _drawAnchorInternal == DebugStyleAnchorType.TopRight
+				|| _drawAnchorInternal == DebugStyleAnchorType.MiddleRight
+				|| _drawAnchorInternal == DebugStyleAnchorType.Middle
+				|| _drawAnchorInternal == DebugStyleAnchorType.TopCenter
+				|| _drawAnchorInternal == DebugStyleAnchorType.BottomCenter) {
+					GUILayout.FlexibleSpace();
+				}
+
+				DrawInputKeyActions(_displayKeyActions);
+
+				if (_drawAnchorInternal == DebugStyleAnchorType.BottomLeft
+				|| _drawAnchorInternal == DebugStyleAnchorType.TopLeft
+				|| _drawAnchorInternal == DebugStyleAnchorType.MiddleLeft
+				|| _drawAnchorInternal == DebugStyleAnchorType.Middle
+				|| _drawAnchorInternal == DebugStyleAnchorType.TopCenter
+				|| _drawAnchorInternal == DebugStyleAnchorType.BottomCenter) {
+					GUILayout.FlexibleSpace();
+				}
+
+				GUILayout.EndHorizontal();
+				#endregion
+
+				#region Draw InputAxisActions
+				GUILayout.BeginHorizontal();
+
+				if (_drawAnchorInternal == DebugStyleAnchorType.BottomRight
+				|| _drawAnchorInternal == DebugStyleAnchorType.TopRight
+				|| _drawAnchorInternal == DebugStyleAnchorType.MiddleRight
+				|| _drawAnchorInternal == DebugStyleAnchorType.Middle
+				|| _drawAnchorInternal == DebugStyleAnchorType.TopCenter
+				|| _drawAnchorInternal == DebugStyleAnchorType.BottomCenter) {
+					GUILayout.FlexibleSpace();
+				}
+
+				DrawInputAxisActions(_displayAxisActions);
+
+				if (_drawAnchorInternal == DebugStyleAnchorType.BottomLeft
+				|| _drawAnchorInternal == DebugStyleAnchorType.TopLeft
+				|| _drawAnchorInternal == DebugStyleAnchorType.MiddleLeft
+				|| _drawAnchorInternal == DebugStyleAnchorType.Middle
+				|| _drawAnchorInternal == DebugStyleAnchorType.TopCenter
+				|| _drawAnchorInternal == DebugStyleAnchorType.BottomCenter) {
+					GUILayout.FlexibleSpace();
+				}
+
+				GUILayout.EndHorizontal();
+				#endregion
+
 			}
-
-			DrawInputKeyActions(_displayKeyActions);
-
-			if (_drawAnchorInternal == DebugStyleAnchorType.BottomLeft
-			|| _drawAnchorInternal == DebugStyleAnchorType.TopLeft
-			|| _drawAnchorInternal == DebugStyleAnchorType.MiddleLeft
-			|| _drawAnchorInternal == DebugStyleAnchorType.Middle
-			|| _drawAnchorInternal == DebugStyleAnchorType.TopCenter
-			|| _drawAnchorInternal == DebugStyleAnchorType.BottomCenter) {
-				GUILayout.FlexibleSpace();
-			}
-
-			GUILayout.EndHorizontal();
-			#endregion
-
-			#region Draw InputAxisActions
-			GUILayout.BeginHorizontal();
-
-			if (_drawAnchorInternal == DebugStyleAnchorType.BottomRight
-			|| _drawAnchorInternal == DebugStyleAnchorType.TopRight
-			|| _drawAnchorInternal == DebugStyleAnchorType.MiddleRight
-			|| _drawAnchorInternal == DebugStyleAnchorType.Middle
-			|| _drawAnchorInternal == DebugStyleAnchorType.TopCenter
-			|| _drawAnchorInternal == DebugStyleAnchorType.BottomCenter) {
-				GUILayout.FlexibleSpace();
-			}
-
-			DrawInputAxisActions(_displayAxisActions);
-
-			if (_drawAnchorInternal == DebugStyleAnchorType.BottomLeft
-			|| _drawAnchorInternal == DebugStyleAnchorType.TopLeft
-			|| _drawAnchorInternal == DebugStyleAnchorType.MiddleLeft
-			|| _drawAnchorInternal == DebugStyleAnchorType.Middle
-			|| _drawAnchorInternal == DebugStyleAnchorType.TopCenter
-			|| _drawAnchorInternal == DebugStyleAnchorType.BottomCenter) {
-				GUILayout.FlexibleSpace();
-			}
-
-			GUILayout.EndHorizontal();
-			#endregion
 
 			#region Draw Capture Mouse Position
 			if (CaptureMousePosition) {
@@ -297,9 +313,9 @@ namespace Code.InputDebugger
 		}
 
 		/// <summary>
-		/// Force update on the captured input actions and axes
+		/// Updates captured input actions and axes from the assigned input set
 		/// </summary>
-		public void UpdateCapturedInputActions()
+		public void UpdateCapturedInputActionsFromInputSet()
 		{
 			if (InputActions == null) {
 				Debug.LogWarning("InputDebugger cannot work with empty capture set. Either assign input capture set or create a new one and then assign it. " +
@@ -307,11 +323,84 @@ namespace Code.InputDebugger
 				return;
 			}
 
-			_captureKeys.Clear();
-			_captureKeys.AddRange(InputActions.Keys);
+			FillCaptureInputKeyActions(InputActions.Keys);
+			FillCaptureInputAxisActions(InputActions.Axes);
+		}
 
+		/// <summary>
+		/// Add input key action to the input capture list
+		/// </summary>
+		/// <param name="keyAction">Input key action to be added</param>
+		public void AddCaptureInputKeyAction(KeyInputAction keyAction)
+		{
+			if (!_captureKeys.Contains(keyAction)) {
+				_captureKeys.Add(keyAction);
+			}
+		}
+
+		/// <summary>
+		/// Add input axis action to the input capture list
+		/// </summary>
+		/// <param name="axisAction">Axis action to be added</param>
+		public void AddCaptureInputAxisAction(AxisInputAction axisAction)
+		{
+			if (!_captureAxes.Contains(axisAction)) {
+				_captureAxes.Add(axisAction);
+			}
+		}
+
+		/// <summary>
+		/// Removes input key action from the capture list
+		/// </summary>
+		/// <param name="keyAction">Input key action to be removed</param>
+		public void RemoveCaptureInputKeyAction(KeyInputAction keyAction)
+		{
+			_captureKeys.Remove(keyAction);
+		}
+
+		/// <summary>
+		/// Removes input axis action from the capture list
+		/// </summary>
+		/// <param name="axisAction">Axis action to be removed</param>
+		public void RemoveCaptureInputAxisAction(AxisInputAction axisAction)
+		{
+			_captureAxes.Remove(axisAction);
+		}
+
+		/// <summary>
+		/// Clears and fills the capture input keys with the given list of input actions
+		/// </summary>
+		/// <param name="keyActions"></param>
+		public void FillCaptureInputKeyActions(List<KeyInputAction> keyActions)
+		{
+			_captureKeys.Clear();
+			_captureKeys.AddRange(keyActions);
+		}
+
+		/// <summary>
+		/// Clears and fills the capture input axes with the given list of input axes
+		/// </summary>
+		/// <param name="axisActions"></param>
+		public void FillCaptureInputAxisActions(List<AxisInputAction> axisActions)
+		{
 			_captureAxes.Clear();
-			_captureAxes.AddRange(InputActions.Axes);
+			_captureAxes.AddRange(axisActions);
+		}
+
+		/// <summary>
+		/// Enables InputDebugger component based on Behaviour.enabled field
+		/// </summary>
+		public void EnableInputDebugger()
+		{
+			enabled = true;
+		}
+
+		/// <summary>
+		/// Disables InputDebugger component based on Behaviour.enabled field
+		/// </summary>
+		public void DisableInputDebugger()
+		{
+			enabled = false;
 		}
 
 		private void SetAnchor(DebugStyleAnchorType newAnchor)
@@ -328,7 +417,12 @@ namespace Code.InputDebugger
 			if (inputActions.Any()) {
 				foreach (KeyInputAction keyAction in inputActions) {
 					if (keyAction.Icon == null) {
-						GUILayout.Label(keyAction.Name.ToString(), DebugTextStyle);
+						if (string.IsNullOrEmpty(keyAction.Name)) {
+							GUILayout.Label(keyAction.Key.ToString(), DebugTextStyle);
+						}
+						else {
+							GUILayout.Label(keyAction.Name.ToString(), DebugTextStyle);
+						}
 					}
 					else {
 						GUIStyle protoStyle = new GUIStyle();
@@ -386,7 +480,7 @@ namespace Code.InputDebugger
 		[ContextMenu("Update Input Actions")]
 		private void ContextUpdateCapturedInputActions()
 		{
-			UpdateCapturedInputActions();
+			UpdateCapturedInputActionsFromInputSet();
 		}
 	}
 }

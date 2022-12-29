@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5782e6ddf75fabc4695ee40f1eeb103c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enabled: 1
+  InputDisplayEnabled: 1
   CaptureMousePosition: 0
   InputActions: {fileID: 11400000, guid: 46c1e62c84e88ad409e3599b540b95b4, type: 2}
   InputIconsSize: {x: 64, y: 64}
