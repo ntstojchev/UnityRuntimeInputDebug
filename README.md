@@ -35,9 +35,9 @@ Main entry point for the debugger is the [**InputDebugger component**](https://g
 The component and the code is documented with comments, tags and tooltips.
 
 ### Default integration into projects
-The debugger includes default prefab (oreset) that can be used or extended in most of the cases.
-- Instantiate **InputDebugger** prefab when you need the input debugger or put it in the scene you want the debugger to be active
-- **InputDebugger** can be found in the Prefabs folder
+The debugger includes default prefab (preset) that can be used or extended in most of the cases.
+- Instantiate `InputDebugger` prefab when you need the input debugger or put it in the scene you want the debugger to be active
+- `InputDebugger` can be found in the Prefabs folder
 - The default preset:
   - has the input debugger enabled by default
   - supports most of the keyboard keys and gamepad buttons
@@ -54,9 +54,12 @@ The main component that you need to use is the `InputDebugger` component. The de
   - You must assign `InputDebugCaptureActions` scriptable object in the `Input Actions` field
   - `InputDebugCaptureActions` is a collection of all the keys and axis that the debugger must listen for. The collection is composed from Keys and Axis collections.
     - `Keys` collection contains `KeyInputAction`. If `Icon` is not assigned, the `Name` will be used during debugging.
-![KeyInputActionExample](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/KeyInputActionExample.png)
+    
+      ![KeyInputActionExample](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/KeyInputActionExample.png)
+
     - `Axes` collection contains `AxisInputAction`. If  `PositiveValueIcon` and/or `NegativeValueIcon` are not assigned, `AxisName` will be used and the value will be displayed based on the `AxisValueLabelPattern` set in the `InputDebugger`.
-![AxisInputActionExampe](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/AxisInputActionExample.png)
+    
+      ![AxisInputActionExampe](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/AxisInputActionExample.png)
 
   - `DebugTextStyle` is `GUIStyle` so you can configure it by your preferences. _Note that the default value for the `Normal` style is BLACK!_
   - `Draw Anchor` can be used to alter the position of the debugger. Currently supported - `TopLeft, TopCenter, TopRight, MiddleLeft, Middle, MiddleRight, BottomLeft, BottomCenter, BottomRight`.
