@@ -70,9 +70,11 @@ The main component that you need to use is the `InputDebugger` component. The de
 
 ## Examples
 
-Example usage of the debugger in the Unity Open Project - Chop Chop!:
+- Example usage of the debugger in the Unity Open Project - Chop Chop!:
 
 ![CaptureExample](https://github.com/ntstojchev/UnityRuntimeInputDebug/blob/main/Docs/UOP_InputCaptureExample_Light.gif)
+
+- You can check the included DemoScene in `Assets/Scenes/` folder
 
 ## Credits
 
